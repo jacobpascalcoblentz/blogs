@@ -96,21 +96,27 @@ As we start to make the shape more concave, it begins to take on more and more r
 
 ## Polygons too!
 
-`ST_ConcaveHull` is also useful on polygons, and follows the same properties as demo'd on multipoints. It's important to note that if there are already holes in the existing polygon, setting `param_allow_holes=false` will still create convex polygons with "holes" in the middle, following the original polygon. 
+`ST_ConcaveHull` is also useful on multipolygons, and follows the same properties as demo'd on multipoints. It's important to note that if there are already holes in the existing multipolygon, setting `param_allow_holes=false` will still create convex polygons with "holes" in the middle, following the original polygon. The concave hulls will always contains the original polygons!
 
-`Select ST_ConcaveHull(polys, 0.5, false) FROM word_pts;` 
+`Select ST_ConcaveHull(ST_Letters('postgis'), 0.5, false);`
 
-![Alt text](st_concave_5_false_polys.png)
+![Alt text](st_concave_5_false_polys_2.png)
 
-As the convexity decreases, the shape looks more and more like the original polygons in the original table. 
+As the convexity decreases and holes are allowed, the shape looks more and more like the original polygons in the original table. 
 
-`Select ST_ConcaveHull(polys, 0.15, true) FROM word_pts;` 
+`Select ST_ConcaveHull(ST_Letters('postgis'), 0.1, true);`
 
-![Alt text](st_concave_005_true_polys.png)
+![Alt text](st_concave_01_polys.png)
 
 
+## ST_TriangulatePolygon
 
+The last demo here is the function `ST_TriangulatePolygon`, new in PostGIS 3.3. This function computes the "best quality" triangulation of a polygon (and also works on multipolygons too!). This can be extremely useful for computing meshes of polygons in a quick and efficient manner. 
+
+`Select ST_TriangulatePolygon(ST_Letters('postgis'));`
+
+![Alt text](st_triangulatepolygon.png)
 
 ## Summary:
 
-`ST_Letters` is a really useful function for both visualization and demoing how certain geometric functions work in PostGIS, and provides a useful starting point for demoing functions on points and polygons. The new improvements in `ST_ConcaveHull` make it more useful for generating concave hulls of geometries 
+`ST_Letters` provides a useful starting point for demoing functions on points and polygons. The new improvements in `ST_ConcaveHull` make it more useful for generating concave hulls of geometries (and significantly more intuitive to use), and `ST_TriangulatePolygon` can be useful for finding meshes of polygons and multipolygons. The team at Crunchy Data will continue to make important contributions to PostGIS in order to help our users create interesting and innovative open source solutions! 
