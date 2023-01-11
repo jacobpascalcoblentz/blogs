@@ -14,7 +14,7 @@ But it's also possible to overlay letters on a map, just like any other polygon.
 
 ![Alt text](postgis_letters_unscaled.png)
 
-Hmmm. Not ideal. First, we want to make a point in the middle of San Francisco in order to serve as a centroid for where we want to move the letters, and we also want to rescale the letters in order to approximately fit over the City of San Francisco. Using the formula for convering units in WGS84 to meters, 0.001 works approximately well enough to fit over the San Francisco Bay Area. Next we use `ST_Translate` in order to move the letters from the top of the map to fit over the Bay Area. Finally, mostly because it looks cool, we use `ST_Rotate` to rotate the polygon 45 degrees. 
+Not ideal. First, we want to make a point in the middle of San Francisco in order to serve as a centroid for where we want to move the letters, and we also want to rescale the letters in order to approximately fit over the City of San Francisco. Using the formula for convering units in WGS84 to meters, 0.001 works approximately well enough to fit over the San Francisco Bay Area. Next we use `ST_Translate` in order to move the letters from the top of the map to fit over the Bay Area. Finally, mostly because it looks cool, we use `ST_Rotate` to rotate the polygon 45 degrees. 
 
 ```
 With san_fran_pt AS (Select (ST_SetSRID(ST_Makepoint(-122.48, 37.758), 4326)) AS geom),
