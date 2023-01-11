@@ -17,16 +17,16 @@ But it's also possible to overlay letters on a map, just like any other polygon.
 Not ideal. First, we want to make a point in the middle of San Francisco in order to serve as a centroid for where we want to move the letters, and we also want to rescale the letters in order to approximately fit over the City of San Francisco. Using the formula for convering units in WGS84 to meters, 0.001 works approximately well enough to fit over the San Francisco Bay Area. Next we use `ST_Translate` in order to move the letters from the top of the map to fit over the Bay Area. Finally, mostly because it looks cool, we use `ST_Rotate` to rotate the polygon 45 degrees. 
 
 ```
-With san_fran_pt AS (Select (ST_SetSRID(ST_Makepoint(-122.48, 37.758), 4326)) AS geom),
-letters AS (Select (ST_SetSRID(ST_Scale(
-                    ST_Letters('San Francisco'), 0.001, 0.001),
-                4326)) AS geom),
+With san_fran_pt AS (Select (ST_Point(-122.48, 37.758, 4326)) AS geom),
+letters AS (Select ST_Scale(ST_SetSRID(
+                    ST_Letters('San Francisco'), 4326),
+                0.001, 0.001) AS geom),
 
 letters_geom AS (
     Select ST_Translate(
             letters.geom,
-            ST_X(pt.geom) - st_x(ST_Centroid(letters.geom)),
-            ST_Y(pt.geom) - st_y(ST_Centroid(letters.geom))
+            ST_X(san_fran_pt.geom) - ST_X(ST_Centroid(letters.geom)),
+            ST_Y(san_fran_pt.geom) - ST_Y(ST_Centroid(letters.geom))
 
         ) AS geom
     FROM letters, san_fran_pt
@@ -86,9 +86,9 @@ This starts to look a bit more like the word 'postgis', with the hole in 'p' bei
 
 As we start to make the shape more concave, it begins to take on more and more recognizable as 'postgis'....until it doesn't and starts to look closer to modern art. 
 
-`Select ST_ConcaveHull(pts, 0.25, true) FROM word_pts`
+`Select ST_ConcaveHull(pts, 0.35, true) FROM word_pts`
 
-![Alt text](st_concave_25_true.png)
+![Alt text](st_concave_35_true.png)
 
 `Select ST_ConcaveHull(pts, 0.05, true) FROM word_pts`
 
