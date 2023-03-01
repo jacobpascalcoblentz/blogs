@@ -1,11 +1,11 @@
-## Using plpython3u to Interact With Web-Based Geocoders
+# Using plpython3u to Interact With Web-Based Geocoders
 
 While it's possible to build a [fully featured geocoder in Postgis](https://postgis.net/docs/postgis_installation.html#install_tiger_geocoder_extension),
 there may be reasons one may not want to. Speficially, the Tiger geocoder requires downloading large amounts of census data, and in space-limited databases, this may not be feasible. 
 What if we could use  a python function using `plpython3u` to hit a web service geocoder every time that we got a new row in the database? In this demo we'll walk through setting this up. 
 
 
-# Installing pgsql-http
+## Installing pgsql-http
 
 `plpython3u` comes with Crunchy Bridge, so no tricky installation required!  
 Simply run the following: 
@@ -13,7 +13,7 @@ Simply run the following:
 CREATE EXTENSION  plpython3u;
 ```
 
-# Creating a function to geocode addresses 
+## Creating a function to geocode addresses 
 
 In this example, I'll use the [census geocoding API](https://geocoding.geo.census.gov/geocoder/Geocoding_Services_API.html) as our web service, and build a function to geocode addresses based on that. 
 
@@ -68,7 +68,7 @@ LANGUAGE sql;
 ```
 
 
-# Deploying this function! 
+## Deploying this function! 
 
 But what if we want to automically run this every time an address is inserted into a table? Let's say we have a table with a field ID, an address, and a point that we want to auto-populate on inserts?
 
@@ -119,7 +119,7 @@ postgres=# select * from addresses;
    1 | 415 Mission St, San Francisco, CA 94105 | 0101000020E610000097CD0E2B66995EC0BB004B2729E54240
 ```
 
-# Summary: 
+## Summary: 
 
 PostgresSQL triggers are a very powerful way to leverage built in functions to automatically transform your data as it enters the database, and this particular case is a great demo for them!
 
