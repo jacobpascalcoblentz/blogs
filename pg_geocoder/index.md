@@ -33,7 +33,7 @@ AS $$
 		lon = coords['x']
 		lat = coords['y']
 		geom = f'SRID=4326;POINT({lon} {lat})'
-	except Exception as e::
+	except Exception as e:
 		plpy.notice(f'address failed: {address}')
 		plpy.notice(f'error: {e.message}')
 		geom = None
@@ -93,7 +93,7 @@ INSERT INTO addresses(address) VALUES ('415 Mission St, San Francisco, CA 94105'
 ```
 
 ```
-postgres=# select * from addresses;
+postgres=# SELECT fid, address, ST_AsText(geom) FROM addresses;
  fid |                 address                 |                        geom
 -----+-----------------------------------------+----------------------------------------------------
    1 | 415 Mission St, San Francisco, CA 94105 | 0101000020E610000097CD0E2B66995EC0BB004B2729E54240
