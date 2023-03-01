@@ -33,8 +33,9 @@ AS $$
 		lon = coords['x']
 		lat = coords['y']
 		geom = f'SRID=4326;POINT({lon} {lat})'
-	except IndexError:
+	except Exception as e::
 		plpy.notice(f'address failed: {address}')
+		plpy.notice(f'error: {e.message}')
 		geom = None
 	return geom
 $$
