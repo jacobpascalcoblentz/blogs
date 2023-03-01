@@ -1,10 +1,4 @@
-## Using pgsql-http to Interact With Web-Based Geocoders
-
-A few years ago, my colleague released a [PostgresSQL HTTP client](https://github.com/pramsey/pgsql-http), which enables one to make requests against 
-web services from within PostgresSQL. This can be both used to poke a web service whenever something happens in the database (using triggers!), and also to vaccum down a 
-result from a resulting web service. 
-
-# Geocoding-- an ideal use case?
+## Using plpython3u to Interact With Web-Based Geocoders
 
 While it's possible to build a [fully featured geocoder in Postgis](https://postgis.net/docs/postgis_installation.html#install_tiger_geocoder_extension),
 there may be reasons one may not want to. Speficially, the Tiger geocoder requires downloading large amounts of census data, and in space-limited databases, this may not be feasible. 
