@@ -20,26 +20,30 @@ In this example, I'll use the [US census geocoding API](https://geocoding.geo.ce
 The function puts together parameters to hit the census geocoding API and then parses the resulting object, and returns a geometry
 
 
-```
+```sql
 CREATE OR REPLACE FUNCTION geocode(address text)
 RETURNS geometry
 AS $$
-    import requests
-    payload = {'address' : address , 'benchmark' : 2020, 'format' : 'json'}
-    base_geocode = 'https://geocoding.geo.census.gov/geocoder/locations/onelineaddress'
-    r = requests.get(base_geocode, params = payload)
-    coords = r.json()['result']['addressMatches'][0]['coordinates']
-    lon = coords['x']
-    lat = coords['y']
-    return(f'SRID=4326;POINT({lon} {lat})')
-
+import requests
+try:
+	payload = {'address' : address , 'benchmark' : 2020, 'format' : 'json'}
+	base_geocode = 'https://geocoding.geo.census.gov/geocoder/locations/onelineaddress'
+	r = requests.get(base_geocode, params = payload)
+	coords = r.json()['result']['addressMatches'][0]['coordinates']
+	lon = coords['x']
+	lat = coords['y']
+	geom = f'SRID=4326;POINT({lon} {lat})'
+except IndexError:
+	plpy.notice(f'address failed: {address}')
+	geom = None
+return geom
 $$
 LANGUAGE 'plpython3u';
 ```
 
 Using this function to geocode Crunchy Data's headquarters:
 
-```
+```sql
 SELECT geocode('162 Seven Farms Drive Charleston, SC 29492');
 
 ```
@@ -50,7 +54,7 @@ SELECT geocode('162 Seven Farms Drive Charleston, SC 29492');
 
 But what if we want to automically run this every time an address is inserted into a table? Let's say we have a table with a field ID, an address, and a point that we want to auto-populate on inserts?
 
-```
+```sql
 CREATE TABLE addresses (
 	fid SERIAL PRIMARY KEY,
 	address VARCHAR,
@@ -60,7 +64,7 @@ CREATE TABLE addresses (
 
 We can make use of a Postgres trigger to add the geocode before every insert! 
 
-```
+```sql
 CREATE OR REPLACE FUNCTION add_geocode()
 RETURNS trigger AS
 $$ 
@@ -75,7 +79,7 @@ $$
 LANGUAGE plpgsql;
 ```
 
-```
+```sql
 CREATE TRIGGER update_geocode BEFORE INSERT ON addresses
     FOR EACH ROW EXECUTE FUNCTION add_geocode();
 	
@@ -83,7 +87,7 @@ CREATE TRIGGER update_geocode BEFORE INSERT ON addresses
 
 Now when running an insert, the value is automatically geocoded! 
 
-```
+```sql
 INSERT INTO addresses(address) VALUES ('415 Mission St, San Francisco, CA 94105');
 ```
 
