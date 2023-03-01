@@ -43,7 +43,7 @@ Using this function to geocode Crunchy Data's headquarters:
 SELECT geocode('162 Seven Farms Drive Charleston, SC 29492');
 
 ```
-![Geocoded Crunchy HQ](geocode_1.png  =250x250)
+![Geocoded Crunchy HQ](geocode_1.png | width=100)
 
 
 # Deploying this function! 
@@ -52,7 +52,7 @@ But what if we want to automically run this every time an address is inserted in
 
 ```
 CREATE TABLE addresses (
-	fid SERIAL PRIMARY KEY NOT NULL,
+	fid SERIAL PRIMARY KEY,
 	address VARCHAR,
 	geom GEOMETRY(POINT, 4326)
 );
