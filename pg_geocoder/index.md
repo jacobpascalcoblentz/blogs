@@ -36,7 +36,6 @@ AS $$
 	base_geocode = 'https://geocoding.geo.census.gov/geocoder/locations/onelineaddress'
 	r = requests.get(base_geocode, params = payload)
 	coords = r.json()['result']['addressMatches'][0]['coordinates']
-	print(r.json())
 	lon = coords['x']
 	lat = coords['y']
 	return(list([lat, lon]))
@@ -89,7 +88,6 @@ RETURNS trigger AS
 $add_geocode$ 
 DECLARE pt_geom geometry;
 BEGIN 
-	RAISE NOTICE 'geocoding %', NEW.address;
 	SELECT * FROM
 	geocode_address(NEW.address)
 	INTO pt_geom;
