@@ -24,19 +24,19 @@ The function puts together parameters to hit the census geocoding API and then p
 CREATE OR REPLACE FUNCTION geocode(address text)
 RETURNS geometry
 AS $$
-import requests
-try:
-	payload = {'address' : address , 'benchmark' : 2020, 'format' : 'json'}
-	base_geocode = 'https://geocoding.geo.census.gov/geocoder/locations/onelineaddress'
-	r = requests.get(base_geocode, params = payload)
-	coords = r.json()['result']['addressMatches'][0]['coordinates']
-	lon = coords['x']
-	lat = coords['y']
-	geom = f'SRID=4326;POINT({lon} {lat})'
-except IndexError:
-	plpy.notice(f'address failed: {address}')
-	geom = None
-return geom
+	import requests
+	try:
+		payload = {'address' : address , 'benchmark' : 2020, 'format' : 'json'}
+		base_geocode = 'https://geocoding.geo.census.gov/geocoder/locations/onelineaddress'
+		r = requests.get(base_geocode, params = payload)
+		coords = r.json()['result']['addressMatches'][0]['coordinates']
+		lon = coords['x']
+		lat = coords['y']
+		geom = f'SRID=4326;POINT({lon} {lat})'
+	except IndexError:
+		plpy.notice(f'address failed: {address}')
+		geom = None
+	return geom
 $$
 LANGUAGE 'plpython3u';
 ```
