@@ -43,7 +43,7 @@ Using this function to geocode Crunchy Data's headquarters:
 SELECT geocode('162 Seven Farms Drive Charleston, SC 29492');
 
 ```
-![Geocoded Crunchy HQ](geocode_1.png | width=100)
+![Geocoded Crunchy HQ](geocode_1.png)
 
 
 # Deploying this function! 
