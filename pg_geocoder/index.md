@@ -5,7 +5,7 @@ there may be reasons one may not want to. Speficially, the Tiger geocoder requir
 What if we could use  a python function using `plpython3u` to hit a web service geocoder every time that we got a new row in the database? In this demo we'll walk through setting this up. 
 
 
-## Installing pgsql-http
+## Installing plpython3u
 
 `plpython3u` comes with Crunchy Bridge, so no tricky installation required!  
 Simply run the following: 
